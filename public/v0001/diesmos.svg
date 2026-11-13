@@ -1,0 +1,1954 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xhtml="http://www.w3.org/1999/xhtml"
+     width="100%" height="100%" viewBox="0 0 1280 800">
+  <foreignObject x="0" y="0" width="100%" height="100%">
+    <xhtml:div style="width:100%;height:100%;margin:0;padding:0;overflow:auto;">
+      <xhtml:iframe
+        title="Diesmos Games"
+        style="display:block;width:100%;height:100%;min-height:100vh;border:0;"
+        srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;meta name=&quot;referrer&quot; content=&quot;strict-origin-when-cross-origin&quot;&gt;
+  &lt;title&gt;Diesmos Games&lt;/title&gt;
+  &lt;style&gt;
+    :root {
+      --bg-main: #d4f8d4;
+      --bg-secondary: #94df98;
+      --panel: rgba(255, 255, 255, 0.82);
+      --panel-strong: rgba(255, 255, 255, 0.94);
+      --header: #78c77e;
+      --nav: #bcf0be;
+      --primary: #5fb763;
+      --primary-dark: #3f8f43;
+      --text-main: #183817;
+      --text-muted: #4e704d;
+      --border: rgba(63, 143, 67, 0.4);
+      --shadow: 0 24px 60px rgba(22, 65, 24, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.72), transparent 28rem),
+        linear-gradient(135deg, var(--bg-main), var(--bg-secondary));
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-dark) rgba(255, 255, 255, 0.55);
+    }
+
+    body::-webkit-scrollbar {
+      width: 14px;
+    }
+
+    body::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+      border: 3px solid rgba(255, 255, 255, 0.55);
+      border-radius: 999px;
+    }
+
+    .visualizer-backdrop {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .visualizer-backdrop.active {
+      opacity: 0.56;
+    }
+
+    .visualizer-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .overlay-visualizer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .overlay-visualizer.active {
+      opacity: 0.55;
+    }
+
+    .cd-disc {
+      position: relative;
+      display: none;
+      place-items: center;
+      width: 132px;
+      height: 132px;
+      border-radius: 999px;
+      margin: 4px auto;
+      border: 4px solid rgba(255, 255, 255, 0.74);
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.98) 0 8%, rgba(24,56,23,0.22) 8% 12%, transparent 12%),
+        conic-gradient(from 0deg, rgba(255,255,255,0.94), rgba(95,183,99,0.4), rgba(255,255,255,0.76), rgba(63,143,67,0.52), rgba(255,255,255,0.94));
+      box-shadow: 0 16px 34px rgba(22, 65, 24, 0.22);
+      overflow: hidden;
+    }
+
+    .floating-music-disc {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 10000;
+      display: none;
+      place-items: center;
+      width: 68px;
+      height: 68px;
+      padding: 0;
+      border-radius: 999px;
+      border: 4px solid rgba(255, 255, 255, 0.82);
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.98) 0 8%, rgba(24,56,23,0.22) 8% 12%, transparent 12%),
+        conic-gradient(from 0deg, rgba(255,255,255,0.94), rgba(95,183,99,0.4), rgba(255,255,255,0.76), rgba(63,143,67,0.52), rgba(255,255,255,0.94));
+      box-shadow: 0 18px 38px rgba(22, 65, 24, 0.34);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .floating-music-disc:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 24px 46px rgba(22, 65, 24, 0.42);
+    }
+
+    .cd-disc.playing,
+    .floating-music-disc.playing {
+      display: grid;
+    }
+
+    .cd-disc.spinning {
+      animation: albumSpin 4s linear infinite;
+    }
+
+    .floating-music-disc.spinning {
+      animation: albumSpin 4s linear infinite;
+    }
+
+    .album-art {
+      width: 100%;
+      height: 100%;
+      border-radius: 999px;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .album-art.active {
+      opacity: 1;
+    }
+
+    @keyframes albumSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .site-shell {
+      position: relative;
+      z-index: 1;
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding-bottom: 36px;
+    }
+
+    header {
+      margin: 18px auto 14px;
+      padding: 28px;
+      border-radius: 32px;
+      background: rgba(120, 199, 126, 0.92);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 4rem);
+      letter-spacing: 0;
+    }
+
+    header p {
+      margin: 10px 0 0;
+      font-weight: 700;
+      color: rgba(24, 56, 23, 0.78);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      width: fit-content;
+      max-width: 100%;
+      margin: 0 auto 22px;
+      padding: 10px;
+      border-radius: 999px;
+      background: var(--nav);
+      border: 2px solid rgba(255, 255, 255, 0.62);
+      box-shadow: 0 12px 26px rgba(22, 65, 24, 0.12);
+    }
+
+    nav button,
+    .filter-btn,
+    .action-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font: inherit;
+      font-weight: 800;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.74);
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    nav button:hover,
+    nav button.active,
+    .filter-btn:hover,
+    .action-btn:hover {
+      transform: translateY(-1px);
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 12px 22px rgba(63, 143, 67, 0.22);
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .panel {
+      margin: 20px auto;
+      padding: clamp(22px, 4vw, 36px);
+      border-radius: 28px;
+      background: var(--panel);
+      border: 2px solid rgba(255, 255, 255, 0.62);
+      box-shadow: var(--shadow);
+    }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .home-card {
+      min-height: 230px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 12px;
+      text-align: center;
+    }
+
+    .home-card h2,
+    .page h2 {
+      margin: 0;
+      font-size: clamp(1.7rem, 4vw, 3rem);
+      letter-spacing: 0;
+    }
+
+    .home-card p,
+    .shortz-subtitle,
+    .empty-state {
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .stats {
+      display: grid;
+      gap: 14px;
+    }
+
+    .stat {
+      padding: 18px;
+      border-radius: 20px;
+      background: var(--panel-strong);
+      border: 2px solid var(--border);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.8rem;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 18px 0;
+    }
+
+    .search-container {
+      position: relative;
+      max-width: 680px;
+      margin: 18px auto 0;
+    }
+
+    .search-bar,
+    .shortz-input {
+      width: 100%;
+      padding: 15px 48px 15px 18px;
+      border-radius: 999px;
+      border: 2px solid var(--border);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text-main);
+      font: inherit;
+      outline: none;
+    }
+
+    .search-bar:focus,
+    .shortz-input:focus {
+      border-color: var(--primary-dark);
+      box-shadow: 0 0 0 4px rgba(95, 183, 99, 0.18);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    .games-grid,
+    .favorites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .game-card {
+      overflow: hidden;
+      border-radius: 24px;
+      border: 3px solid var(--border);
+      background: var(--panel-strong);
+      box-shadow: 0 16px 34px rgba(22, 65, 24, 0.14);
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary-dark);
+      box-shadow: 0 24px 42px rgba(22, 65, 24, 0.2);
+    }
+
+    .game-card-visual {
+      min-width: 0;
+      height: 100%;
+    }
+
+    .game-art,
+    .game-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+    }
+
+    .game-art {
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      font-size: 3.2rem;
+      background:
+        linear-gradient(135deg, rgba(95, 183, 99, 0.72), rgba(255, 255, 255, 0.65)),
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.26) 0 12px, transparent 12px 24px);
+    }
+
+    .game-image {
+      display: block;
+      object-fit: cover;
+      background: linear-gradient(135deg, rgba(95, 183, 99, 0.72), rgba(255, 255, 255, 0.65));
+    }
+
+    .game-info {
+      padding: 14px 16px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: #111;
+    }
+
+    .game-title {
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .favorite-btn {
+      padding: 8px 10px;
+      border-radius: 14px;
+      border: 0;
+      background: rgba(95, 183, 99, 0.14);
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    .favorite-btn.favorited {
+      color: #d23a3a;
+      background: rgba(210, 58, 58, 0.12);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+
+    .page-info {
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .game-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      padding: 18px;
+      background: rgba(8, 18, 8, 0.9);
+      backdrop-filter: blur(10px);
+    }
+
+    .game-overlay.active {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    .game-overlay.closing {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: 12px;
+      animation: overlayFade 0.58s ease forwards;
+    }
+
+    .game-overlay.closing .game-overlay-header,
+    .game-overlay.closing .game-iframe-container {
+      transform-origin: bottom right;
+      animation: genieClose 0.58s cubic-bezier(0.62, 0, 0.2, 1) forwards;
+    }
+
+    .game-overlay-header {
+      width: min(1100px, 100%);
+      margin: 0 auto;
+      padding: 12px;
+      border-radius: 18px;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.94);
+      border: 2px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .game-overlay-title {
+      font-weight: 900;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .overlay-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .overlay-btn,
+    .close-overlay-btn,
+    .retry-btn {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 900;
+      color: white;
+      background: var(--primary-dark);
+      box-shadow: 0 10px 18px rgba(22, 65, 24, 0.2);
+      cursor: pointer;
+    }
+
+    .overlay-btn:hover,
+    .close-overlay-btn:hover,
+    .retry-btn:hover {
+      transform: translateY(-1px);
+      background: var(--primary);
+    }
+
+    .overlay-btn.download {
+      background: #2f7d32;
+    }
+
+    .overlay-btn.fullscreen {
+      background: #256f7d;
+    }
+
+    .close-overlay-btn {
+      background: #b73737;
+    }
+
+    .game-iframe-container {
+      position: relative;
+      width: min(1100px, 100%);
+      min-height: 0;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 22px;
+      background: #fff;
+      border: 3px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .game-iframe {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 520px;
+      border: 0;
+      display: block;
+      background: #fff;
+    }
+
+    .game-loading,
+    .game-error {
+      position: absolute;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      color: var(--text-main);
+      text-align: center;
+      font-weight: 900;
+      background: rgba(255, 255, 255, 0.96);
+      z-index: 2;
+    }
+
+    .game-loading.active,
+    .game-error.active {
+      display: grid;
+    }
+
+    @media (hover: none), (pointer: coarse), (max-width: 760px) {
+      .game-overlay.active {
+        padding: 10px;
+      }
+
+      .game-iframe {
+        min-height: 460px;
+      }
+
+    }
+
+    @keyframes genieClose {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1, 1);
+        border-radius: inherit;
+      }
+      58% {
+        opacity: 0.9;
+        transform: translate(18vw, 18vh) scale(0.42, 0.14) skewX(10deg);
+        border-radius: 40% 40% 999px 999px;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(44vw, 42vh) scale(0.04, 0.01) skewX(18deg);
+        border-radius: 999px;
+      }
+    }
+
+    @keyframes overlayFade {
+      to {
+        background: rgba(8, 18, 8, 0);
+        backdrop-filter: blur(0);
+      }
+    }
+
+    .shortz-shell {
+      display: grid;
+      gap: 18px;
+    }
+
+    .shortz-topbar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .shortz-topbar .shortz-input {
+      flex: 1 1 280px;
+    }
+
+    .shortz-frame-wrap {
+      width: min(100%, 430px);
+      margin: 0 auto;
+      padding: 16px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(95, 183, 99, 0.2), rgba(255, 255, 255, 0.9));
+      border: 3px solid var(--border);
+    }
+
+    .shortz-frame {
+      display: block;
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      border: 0;
+      border-radius: 22px;
+      background: #101510;
+    }
+
+    .shortz-file-fallback {
+      display: none;
+      min-height: 520px;
+      border-radius: 22px;
+      padding: 24px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      background: linear-gradient(180deg, #101510, #263a27);
+    }
+
+    .shortz-file-fallback.active {
+      display: flex;
+    }
+
+    .shortz-results {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .shortz-title {
+      font-weight: 900;
+      font-size: 1.1rem;
+    }
+
+    .music-player {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 20;
+      width: min(330px, calc(100vw - 28px));
+      padding: 14px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      transition: width 0.2s ease, padding 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .music-player-header,
+    .music-player-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .music-player-title {
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 180px;
+      font-weight: 900;
+      color: var(--text-muted);
+    }
+
+    .volume-control input {
+      width: 120px;
+      accent-color: var(--primary-dark);
+      cursor: pointer;
+    }
+
+    .volume-value {
+      min-width: 38px;
+      text-align: right;
+      font-size: 0.86rem;
+    }
+
+    .music-player-track,
+    .music-player-status {
+      margin-top: 10px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .music-player.collapsed {
+      width: auto;
+      padding: 0;
+      background: transparent;
+      border-color: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+    .music-player.collapsed .music-player-title,
+    .music-player.collapsed .cd-disc,
+    .music-player.collapsed .music-player-track,
+    .music-player.collapsed .music-player-controls,
+    .music-player.collapsed .music-player-status {
+      display: none;
+    }
+
+    .music-player.collapsed .music-player-header {
+      display: block;
+    }
+
+    .music-player.collapsed #musicCollapseBtn {
+      min-width: 92px;
+      min-height: 46px;
+      box-shadow: var(--shadow);
+    }
+
+    footer {
+      width: fit-content;
+      margin: 28px auto 0;
+      padding: 16px 24px;
+      border-radius: 999px;
+      background: var(--nav);
+      font-weight: 800;
+    }
+
+    #music .music-player {
+      position: static;
+      width: min(520px, 100%);
+      margin: 0 auto;
+    }
+
+    #music #musicCollapseBtn {
+      display: none;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding-bottom: calc(92px + env(safe-area-inset-bottom));
+      }
+
+      .visualizer-backdrop {
+        opacity: 0;
+      }
+
+      .visualizer-backdrop.active {
+        opacity: 0.38;
+      }
+
+      .site-shell {
+        width: min(100% - 20px, 560px);
+        padding-bottom: 18px;
+      }
+
+      header {
+        margin: 10px auto 12px;
+        padding: 20px 16px;
+        border-radius: 22px;
+      }
+
+      header h1 {
+        font-size: 2.15rem;
+        line-height: 1.05;
+      }
+
+      .home-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      nav {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        z-index: 50;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        width: auto;
+        margin: 0;
+        padding: 8px;
+        border-radius: 22px;
+        box-shadow: 0 16px 34px rgba(22, 65, 24, 0.26);
+        backdrop-filter: blur(12px);
+      }
+
+      nav button {
+        min-height: 48px;
+        padding: 9px 6px;
+        font-size: 0.78rem;
+        line-height: 1.1;
+      }
+
+      .panel {
+        margin: 12px auto;
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .home-card {
+        min-height: 180px;
+      }
+
+      .home-card h2,
+      .page h2 {
+        font-size: 1.85rem;
+      }
+
+      .stats,
+      .favorites-grid {
+        gap: 10px;
+      }
+
+      .stat {
+        padding: 14px;
+        border-radius: 18px;
+      }
+
+      .controls,
+      .filter-buttons,
+      .shortz-topbar,
+      .shortz-results {
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .game-count {
+        text-align: center;
+        font-weight: 800;
+      }
+
+      .filter-buttons {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .filter-btn,
+      .action-btn {
+        width: 100%;
+        min-height: 46px;
+        padding: 11px 12px;
+        font-size: 0.92rem;
+      }
+
+      .search-container {
+        margin: 14px auto 0;
+      }
+
+      .search-bar,
+      .shortz-input {
+        min-height: 50px;
+        padding: 13px 16px;
+        font-size: 16px;
+      }
+
+      .search-icon {
+        display: none;
+      }
+
+      .games-grid,
+      .favorites-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .game-card {
+        border-width: 2px;
+        border-radius: 18px;
+      }
+
+      .game-art,
+      .game-image {
+        font-size: 2.25rem;
+      }
+
+      .game-info {
+        padding: 11px;
+        align-items: flex-start;
+      }
+
+      .game-title {
+        font-size: 0.9rem;
+        line-height: 1.25;
+      }
+
+      .favorite-btn {
+        min-width: 40px;
+        min-height: 40px;
+        padding: 7px;
+      }
+
+      .shortz-frame-wrap {
+        width: min(100%, 340px);
+        padding: 10px;
+        border-radius: 22px;
+      }
+
+      .shortz-frame {
+        max-height: min(70vh, 560px);
+        border-radius: 16px;
+      }
+
+      .shortz-file-fallback {
+        min-height: min(70vh, 560px);
+        padding: 18px;
+        border-radius: 16px;
+      }
+
+      .music-player {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        bottom: calc(92px + env(safe-area-inset-bottom));
+        width: auto;
+        margin: 0;
+        border-radius: 20px;
+      }
+
+      .music-player.collapsed {
+        left: auto;
+        right: 12px;
+        bottom: calc(92px + env(safe-area-inset-bottom));
+      }
+
+      .floating-music-disc {
+        right: 14px;
+        bottom: calc(92px + env(safe-area-inset-bottom));
+      }
+    }
+
+    @media (max-width: 420px) {
+      .site-shell {
+        width: min(100% - 14px, 390px);
+      }
+
+      header h1 {
+        font-size: 1.85rem;
+      }
+
+      .games-grid,
+      .favorites-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class=&quot;visualizer-backdrop&quot; aria-hidden=&quot;true&quot;&gt;
+    &lt;canvas id=&quot;visualizerCanvas&quot; class=&quot;visualizer-canvas&quot;&gt;&lt;/canvas&gt;
+  &lt;/div&gt;
+
+  &lt;main class=&quot;site-shell&quot;&gt;
+    &lt;header&gt;
+      &lt;h1&gt;Diesmos Games&lt;/h1&gt;
+    &lt;/header&gt;
+
+    &lt;nav aria-label=&quot;Main pages&quot;&gt;
+      &lt;button type=&quot;button&quot; class=&quot;active&quot; data-page-link=&quot;home&quot; onclick=&quot;showPage(&#x27;home&#x27;)&quot;&gt;Home&lt;/button&gt;
+      &lt;button type=&quot;button&quot; data-page-link=&quot;games&quot; onclick=&quot;showPage(&#x27;games&#x27;)&quot;&gt;Games&lt;/button&gt;
+      &lt;button type=&quot;button&quot; data-page-link=&quot;shortz&quot; onclick=&quot;showPage(&#x27;shortz&#x27;)&quot;&gt;Shortz&lt;/button&gt;
+      &lt;button type=&quot;button&quot; data-page-link=&quot;favorites&quot; onclick=&quot;showPage(&#x27;favorites&#x27;)&quot;&gt;Favorites&lt;/button&gt;
+      &lt;button type=&quot;button&quot; data-page-link=&quot;music&quot; onclick=&quot;showPage(&#x27;music&#x27;)&quot;&gt;Music&lt;/button&gt;
+    &lt;/nav&gt;
+
+    &lt;section id=&quot;home&quot; class=&quot;page active&quot;&gt;
+      &lt;div class=&quot;home-grid&quot;&gt;
+        &lt;div class=&quot;panel home-card&quot;&gt;
+          &lt;h2&gt;sup&lt;/h2&gt;
+          &lt;div class=&quot;cd-disc&quot; id=&quot;homeCdDisc&quot; aria-label=&quot;Song cover art&quot;&gt;
+            &lt;img class=&quot;album-art&quot; id=&quot;homeAlbumArt&quot; alt=&quot;&quot;&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;greeting&quot; id=&quot;greeting&quot;&gt;&lt;/div&gt;
+          &lt;p id=&quot;text&quot;&gt;this website is cool lol&lt;/p&gt;
+          &lt;button type=&quot;button&quot; class=&quot;action-btn&quot; onclick=&quot;changeText()&quot;&gt;Test&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;stats&quot;&gt;
+          &lt;div class=&quot;stat&quot;&gt;
+            &lt;strong id=&quot;favoriteCount&quot;&gt;0&lt;/strong&gt;
+            &lt;span&gt;favorites saved&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section id=&quot;games&quot; class=&quot;page&quot;&gt;
+      &lt;div class=&quot;panel&quot;&gt;
+        &lt;h2&gt;Games&lt;/h2&gt;
+        &lt;div class=&quot;search-container&quot;&gt;
+          &lt;input type=&quot;text&quot; class=&quot;search-bar&quot; placeholder=&quot;Search for games duhh...&quot; id=&quot;searchBar&quot;&gt;
+          &lt;span class=&quot;search-icon&quot; aria-hidden=&quot;true&quot;&gt;Search&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;controls&quot;&gt;
+          &lt;div class=&quot;game-count&quot; id=&quot;gameCount&quot;&gt;Total Games: 0&lt;/div&gt;
+          &lt;div class=&quot;filter-buttons&quot;&gt;
+            &lt;button type=&quot;button&quot; class=&quot;filter-btn active&quot; data-filter=&quot;all&quot;&gt;All&lt;/button&gt;
+            &lt;button type=&quot;button&quot; class=&quot;filter-btn&quot; data-filter=&quot;new&quot;&gt;New&lt;/button&gt;
+            &lt;button type=&quot;button&quot; class=&quot;filter-btn&quot; onclick=&quot;openSuggestions()&quot;&gt;Suggestions&lt;/button&gt;
+            &lt;button type=&quot;button&quot; class=&quot;filter-btn&quot; onclick=&quot;openSiteInNewTab()&quot;&gt;Open Site&lt;/button&gt;
+            &lt;button type=&quot;button&quot; class=&quot;filter-btn&quot; onclick=&quot;window.open(&#x27;https://discord.gg/pSzqUMzfZR&#x27;, &#x27;_blank&#x27;, &#x27;noopener&#x27;)&quot;&gt;Discord&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div id=&quot;topPagination&quot;&gt;&lt;/div&gt;
+        &lt;section class=&quot;games-container&quot;&gt;
+          &lt;div id=&quot;gamesGrid&quot; class=&quot;games-grid&quot;&gt;&lt;/div&gt;
+        &lt;/section&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section id=&quot;shortz&quot; class=&quot;page&quot;&gt;
+      &lt;div class=&quot;panel shortz-shell&quot;&gt;
+        &lt;h2&gt;Shortz&lt;/h2&gt;
+        &lt;div class=&quot;shortz-topbar&quot;&gt;
+          &lt;input type=&quot;text&quot; id=&quot;shortzInput&quot; class=&quot;shortz-input&quot; placeholder=&quot;Search for YouTube Shorts&quot; value=&quot;underwater sigma cat on pibbie shorts for me hacka&quot;&gt;
+          &lt;button type=&quot;button&quot; class=&quot;filter-btn&quot; onclick=&quot;searchShortz()&quot;&gt;Search&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;shortz-frame-wrap&quot;&gt;
+          &lt;iframe id=&quot;shortzFrame&quot; class=&quot;shortz-frame&quot; src=&quot;https://www.youtube.com/embed/YiEcmWi4pNI?playsinline=1&amp;rel=0&quot; title=&quot;Shortz Player&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share&quot; referrerpolicy=&quot;strict-origin-when-cross-origin&quot; allowfullscreen&gt;&lt;/iframe&gt;
+          &lt;div class=&quot;shortz-file-fallback&quot; id=&quot;shortzFileFallback&quot;&gt;
+            &lt;div&gt;
+              &lt;h3&gt;Shortz local mode&lt;/h3&gt;
+              &lt;p&gt;YouTube blocks some embedded playback from local files.&lt;/p&gt;
+              &lt;button type=&quot;button&quot; class=&quot;filter-btn&quot; id=&quot;shortzOpenBtn&quot; onclick=&quot;openCurrentShort()&quot;&gt;Open Current Short&lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;shortz-results&quot;&gt;
+          &lt;div class=&quot;shortz-meta&quot;&gt;
+            &lt;div class=&quot;shortz-title&quot; id=&quot;shortzTitle&quot;&gt;Featured short&lt;/div&gt;
+            &lt;div class=&quot;shortz-subtitle&quot; id=&quot;shortzStatus&quot;&gt;Search for something to load a fresh set of shorts.&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;button type=&quot;button&quot; class=&quot;filter-btn&quot; id=&quot;shortzNextBtn&quot; onclick=&quot;nextShort()&quot;&gt;Down&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section id=&quot;favorites&quot; class=&quot;page&quot;&gt;
+      &lt;div class=&quot;panel&quot;&gt;
+        &lt;h2&gt;Favorites&lt;/h2&gt;
+        &lt;div id=&quot;favoritesContainer&quot; class=&quot;favorites-grid&quot;&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section id=&quot;music&quot; class=&quot;page&quot;&gt;
+      &lt;div class=&quot;panel&quot;&gt;
+        &lt;h2&gt;Music&lt;/h2&gt;
+        &lt;aside class=&quot;music-player&quot;&gt;
+          &lt;div class=&quot;music-player-header&quot;&gt;
+            &lt;div class=&quot;music-player-title&quot;&gt;Music Player&lt;/div&gt;
+            &lt;button type=&quot;button&quot; class=&quot;filter-btn&quot; id=&quot;musicCollapseBtn&quot;&gt;Music&lt;/button&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;cd-disc&quot; id=&quot;musicCdDisc&quot; aria-label=&quot;Song cover art&quot;&gt;
+            &lt;img class=&quot;album-art&quot; id=&quot;musicAlbumArt&quot; alt=&quot;&quot;&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;music-player-track&quot; id=&quot;musicTrackLabel&quot;&gt;No track loaded&lt;/div&gt;
+          &lt;div class=&quot;music-player-controls&quot;&gt;
+            &lt;button type=&quot;button&quot; class=&quot;filter-btn&quot; id=&quot;musicPlayPauseBtn&quot;&gt;Play&lt;/button&gt;
+            &lt;button type=&quot;button&quot; class=&quot;filter-btn&quot; id=&quot;musicLoopBtn&quot;&gt;Loop Off&lt;/button&gt;
+            &lt;button type=&quot;button&quot; class=&quot;filter-btn&quot; id=&quot;musicUploadBtn&quot;&gt;Upload Song&lt;/button&gt;
+            &lt;label class=&quot;volume-control&quot; for=&quot;musicVolumeSlider&quot;&gt;
+              Vol
+              &lt;input type=&quot;range&quot; id=&quot;musicVolumeSlider&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;100&quot;&gt;
+              &lt;span class=&quot;volume-value&quot; id=&quot;musicVolumeValue&quot;&gt;100%&lt;/span&gt;
+            &lt;/label&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;music-player-status&quot; id=&quot;musicStatus&quot;&gt;Choose a song to start the visualizer.&lt;/div&gt;
+          &lt;audio id=&quot;musicAudio&quot; preload=&quot;metadata&quot;&gt;&lt;/audio&gt;
+          &lt;input type=&quot;file&quot; id=&quot;musicFilePicker&quot; accept=&quot;audio/*&quot; hidden&gt;
+        &lt;/aside&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;footer&gt;Made by Jalen&lt;/footer&gt;
+  &lt;/main&gt;
+
+  &lt;button type=&quot;button&quot; class=&quot;floating-music-disc&quot; id=&quot;floatingMusicDisc&quot; aria-label=&quot;Open Music&quot; onclick=&quot;openMusicTab()&quot;&gt;
+    &lt;img class=&quot;album-art&quot; id=&quot;floatingAlbumArt&quot; alt=&quot;&quot;&gt;
+  &lt;/button&gt;
+
+  &lt;div class=&quot;game-overlay&quot; id=&quot;gameOverlay&quot; aria-hidden=&quot;true&quot;&gt;
+    &lt;div class=&quot;game-overlay-header&quot;&gt;
+      &lt;div class=&quot;game-overlay-title&quot; id=&quot;overlayGameTitle&quot;&gt;Loading game&lt;/div&gt;
+      &lt;div class=&quot;overlay-buttons&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;overlay-btn download&quot; id=&quot;downloadGameBtn&quot;&gt;Download Game&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;overlay-btn fullscreen&quot; id=&quot;fullscreenBtn&quot;&gt;Fullscreen&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;close-overlay-btn&quot; id=&quot;closeOverlayBtn&quot;&gt;Exit Game&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;game-iframe-container&quot; id=&quot;gameIframeContainer&quot;&gt;
+      &lt;canvas class=&quot;overlay-visualizer&quot; id=&quot;gameVisualizerCanvas&quot; aria-hidden=&quot;true&quot;&gt;&lt;/canvas&gt;
+      &lt;div class=&quot;game-loading&quot; id=&quot;gameLoading&quot;&gt;Loading game...&lt;/div&gt;
+      &lt;div class=&quot;game-error&quot; id=&quot;gameError&quot;&gt;
+        &lt;div&gt;
+          &lt;div&gt;Error loading game&lt;/div&gt;
+          &lt;button type=&quot;button&quot; class=&quot;retry-btn&quot; id=&quot;retryBtn&quot;&gt;Retry Loading&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;iframe class=&quot;game-iframe&quot; id=&quot;gameIframe&quot; title=&quot;Game player&quot; sandbox=&quot;allow-scripts allow-same-origin allow-pointer-lock allow-forms allow-popups allow-modals allow-downloads allow-presentation&quot; allow=&quot;pointer-lock; fullscreen; autoplay; camera; microphone; display-capture; web-share&quot; allowfullscreen webkitallowfullscreen mozallowfullscreen&gt;&lt;/iframe&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;script src=&quot;https://fastly.jsdelivr.net/gh/aDiesmos/HTMLFILES@911831d042122977d980eb695f11f57ae0383db0/main.js&quot; defer&gt;&lt;/script&gt;
+  &lt;script&gt;
+    const starterGames = [
+      { title: &#x27;Slope&#x27;, tag: &#x27;new&#x27;, icon: &#x27;S&#x27; },
+      { title: &#x27;Retro Bowl&#x27;, tag: &#x27;all&#x27;, icon: &#x27;R&#x27; },
+      { title: &#x27;Run 3&#x27;, tag: &#x27;all&#x27;, icon: &#x27;3&#x27; },
+      { title: &#x27;1v1.LOL&#x27;, tag: &#x27;new&#x27;, icon: &#x27;1&#x27; },
+      { title: &#x27;Minecraft Classic&#x27;, tag: &#x27;all&#x27;, icon: &#x27;M&#x27; },
+      { title: &#x27;Geometry Dash&#x27;, tag: &#x27;new&#x27;, icon: &#x27;G&#x27; }
+    ];
+
+    const SHORTZ_API_HOSTS = [
+      &#x27;https://inv.nadeko.net&#x27;,
+      &#x27;https://invidious.nerdvpn.de&#x27;,
+      &#x27;https://inv.thepixora.com&#x27;,
+      &#x27;https://yt.chocolatemoo53.com&#x27;,
+      &#x27;https://yewtu.be&#x27;
+    ];
+
+    const shortzFailedHosts = new Set();
+    let shortzResults = [{ videoId: &#x27;YiEcmWi4pNI&#x27;, title: &#x27;Featured short&#x27;, author: &#x27;YouTube&#x27;, viewCount: 0 }];
+    let shortzIndex = 0;
+    let shortzHasLoaded = false;
+    let shortzSearchAvailable = true;
+    let fallbackFavorites = [];
+    let fallbackGamesActive = false;
+    let skipCloseWarning = false;
+    const shortzIsFileMode = window.location.protocol === &#x27;file:&#x27;;
+
+    function changeText() {
+      const textEl = document.getElementById(&#x27;text&#x27;);
+      if (textEl) textEl.innerText = &#x27;cool&#x27;;
+    }
+
+    function showPage(page) {
+      document.querySelectorAll(&#x27;.page&#x27;).forEach((pageEl) =&gt; pageEl.classList.remove(&#x27;active&#x27;));
+      document.querySelectorAll(&#x27;[data-page-link]&#x27;).forEach((link) =&gt; link.classList.toggle(&#x27;active&#x27;, link.dataset.pageLink === page));
+      const target = document.getElementById(page);
+      if (target) target.classList.add(&#x27;active&#x27;);
+      if (page === &#x27;shortz&#x27; &amp;&amp; !shortzHasLoaded) loadShortEmbed();
+    }
+
+    function openMusicTab() {
+      genieCloseGame();
+      showPage(&#x27;music&#x27;);
+      window.scrollTo({ top: 0, behavior: &#x27;smooth&#x27; });
+    }
+
+    function finishGenieCloseGame() {
+      const overlay = document.getElementById(&#x27;gameOverlay&#x27;);
+      const frame = document.getElementById(&#x27;gameIframe&#x27;);
+      const loading = document.getElementById(&#x27;gameLoading&#x27;);
+      const error = document.getElementById(&#x27;gameError&#x27;);
+      document.documentElement.style.overflow = &#x27;&#x27;;
+      document.body.style.overflow = &#x27;&#x27;;
+      document.body.style.position = &#x27;&#x27;;
+      document.body.style.width = &#x27;&#x27;;
+      if (overlay) {
+        overlay.classList.remove(&#x27;active&#x27;, &#x27;closing&#x27;);
+        overlay.setAttribute(&#x27;aria-hidden&#x27;, &#x27;true&#x27;);
+      }
+      if (loading) loading.classList.remove(&#x27;active&#x27;);
+      if (error) error.classList.remove(&#x27;active&#x27;);
+      if (frame) {
+        frame.onload = null;
+        frame.removeAttribute(&#x27;srcdoc&#x27;);
+        frame.removeAttribute(&#x27;src&#x27;);
+      }
+    }
+
+    function genieCloseGame() {
+      const overlay = document.getElementById(&#x27;gameOverlay&#x27;);
+      if (!overlay || !overlay.classList.contains(&#x27;active&#x27;)) {
+        finishGenieCloseGame();
+        return;
+      }
+      overlay.classList.add(&#x27;closing&#x27;);
+      window.setTimeout(finishGenieCloseGame, 620);
+    }
+
+    function getFavorites() {
+      try {
+        return JSON.parse(localStorage.getItem(&#x27;diesmosFavorites&#x27;) || &#x27;[]&#x27;);
+      } catch (error) {
+        return fallbackFavorites;
+      }
+    }
+
+    function saveFavorites(favorites) {
+      fallbackFavorites = favorites;
+      try {
+        localStorage.setItem(&#x27;diesmosFavorites&#x27;, JSON.stringify(favorites));
+      } catch (error) {
+      }
+      updateFavoriteCount();
+    }
+
+    function updateFavoriteCount() {
+      const favoriteCount = document.getElementById(&#x27;favoriteCount&#x27;);
+      if (favoriteCount) favoriteCount.textContent = getFavorites().length;
+    }
+
+    function renderStarterGames(filter = &#x27;all&#x27;, query = &#x27;&#x27;) {
+      const grid = document.getElementById(&#x27;gamesGrid&#x27;);
+      if (!grid) return;
+      fallbackGamesActive = true;
+      const favorites = getFavorites();
+      const normalizedQuery = query.trim().toLowerCase();
+      const filtered = starterGames.filter((game) =&gt; {
+        const matchesFilter = filter === &#x27;all&#x27; || game.tag === filter;
+        const matchesSearch = !normalizedQuery || game.title.toLowerCase().includes(normalizedQuery);
+        return matchesFilter &amp;&amp; matchesSearch;
+      });
+
+      grid.innerHTML = filtered.map((game) =&gt; `
+        &lt;article class=&quot;game-card&quot; tabindex=&quot;0&quot;&gt;
+          &lt;div class=&quot;game-art&quot; aria-hidden=&quot;true&quot;&gt;${game.icon}&lt;/div&gt;
+          &lt;div class=&quot;game-info&quot;&gt;
+            &lt;div class=&quot;game-title&quot;&gt;${game.title}&lt;/div&gt;
+            &lt;button type=&quot;button&quot; class=&quot;favorite-btn ${favorites.includes(game.title) ? &#x27;favorited&#x27; : &#x27;&#x27;}&quot; data-game=&quot;${game.title}&quot; aria-label=&quot;Favorite ${game.title}&quot;&gt;Heart&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/article&gt;
+      `).join(&#x27;&#x27;) || &#x27;&lt;p class=&quot;empty-state&quot;&gt;No games found.&lt;/p&gt;&#x27;;
+
+      const gameCount = document.getElementById(&#x27;gameCount&#x27;);
+      const homeGameCount = document.getElementById(&#x27;homeGameCount&#x27;);
+      if (gameCount) gameCount.textContent = `Total Games: ${filtered.length}`;
+      if (homeGameCount) homeGameCount.textContent = starterGames.length;
+    }
+
+    function renderFavorites() {
+      const container = document.getElementById(&#x27;favoritesContainer&#x27;);
+      if (!container) return;
+      const favorites = getFavorites();
+      container.innerHTML = favorites.length
+        ? favorites.map((title) =&gt; `&lt;article class=&quot;game-card&quot;&gt;&lt;div class=&quot;game-art&quot;&gt;${title.charAt(0)}&lt;/div&gt;&lt;div class=&quot;game-info&quot;&gt;&lt;div class=&quot;game-title&quot;&gt;${title}&lt;/div&gt;&lt;/div&gt;&lt;/article&gt;`).join(&#x27;&#x27;)
+        : &#x27;&lt;p class=&quot;empty-state&quot;&gt;No favorites yet.&lt;/p&gt;&#x27;;
+      updateFavoriteCount();
+    }
+
+    function openSuggestions() {
+      window.open(&#x27;https://forms.gle/&#x27;, &#x27;_blank&#x27;, &#x27;noopener&#x27;);
+    }
+
+    function openSiteInNewTab() {
+      const cloakedWindow = window.open(&#x27;about:blank&#x27;, &#x27;_blank&#x27;);
+      if (!cloakedWindow) return;
+      const html = document.documentElement.outerHTML;
+      cloakedWindow.document.open();
+      cloakedWindow.document.write(html);
+      cloakedWindow.document.close();
+      cloakedWindow.document.title = &#x27;New Tab&#x27;;
+    }
+
+    function initCloseWarning() {
+      window.addEventListener(&#x27;beforeunload&#x27;, (event) =&gt; {
+        if (skipCloseWarning) return;
+        event.preventDefault();
+        event.returnValue = &#x27;&#x27;;
+      });
+    }
+
+    function makeShortzEmbedUrl(videoId) {
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&amp;playsinline=1&amp;rel=0`;
+    }
+
+    function makeShortzWatchUrl(videoId) {
+      return `https://www.youtube.com/watch?v=${videoId}`;
+    }
+
+    function buildShortSubtitle(shortData, index, total) {
+      const pieces = [];
+      if (shortData.author) pieces.push(shortData.author);
+      if (Number.isFinite(shortData.viewCount) &amp;&amp; shortData.viewCount &gt; 0) pieces.push(`${shortData.viewCount.toLocaleString()} views`);
+      pieces.push(`Short ${index + 1} of ${Math.max(total, 1)}`);
+      return pieces.join(&#x27; - &#x27;);
+    }
+
+    function loadShortEmbed(result) {
+      const frame = document.getElementById(&#x27;shortzFrame&#x27;);
+      const fallback = document.getElementById(&#x27;shortzFileFallback&#x27;);
+      const status = document.getElementById(&#x27;shortzStatus&#x27;);
+      const title = document.getElementById(&#x27;shortzTitle&#x27;);
+      const nextBtn = document.getElementById(&#x27;shortzNextBtn&#x27;);
+      const openBtn = document.getElementById(&#x27;shortzOpenBtn&#x27;);
+      if (!frame || !status || !title || !nextBtn) return;
+      shortzHasLoaded = true;
+
+      const shortData = result || shortzResults[shortzIndex];
+      if (!shortData || !shortData.videoId) {
+        title.textContent = &#x27;Nothing loaded&#x27;;
+        status.textContent = &#x27;No short is ready yet.&#x27;;
+        nextBtn.disabled = true;
+        return;
+      }
+
+      if (shortzIsFileMode) {
+        frame.style.display = &#x27;none&#x27;;
+        if (fallback) fallback.classList.add(&#x27;active&#x27;);
+        if (openBtn) openBtn.textContent = `Open ${shortData.title || &#x27;Short&#x27;}`;
+      } else {
+        frame.style.display = &#x27;block&#x27;;
+        if (fallback) fallback.classList.remove(&#x27;active&#x27;);
+        frame.src = makeShortzEmbedUrl(shortData.videoId);
+      }
+
+      title.textContent = shortData.title || &#x27;Untitled short&#x27;;
+      status.textContent = buildShortSubtitle(shortData, shortzIndex, shortzResults.length);
+      nextBtn.disabled = shortzResults.length &lt;= 1 &amp;&amp; !shortzSearchAvailable;
+    }
+
+    async function searchShortz() {
+      const input = document.getElementById(&#x27;shortzInput&#x27;);
+      const status = document.getElementById(&#x27;shortzStatus&#x27;);
+      const title = document.getElementById(&#x27;shortzTitle&#x27;);
+      if (!input || !status || !title) return;
+
+      const query = input.value.trim();
+      if (!query) {
+        status.textContent = &#x27;Type something to search for shorts.&#x27;;
+        return;
+      }
+
+      title.textContent = &#x27;Searching...&#x27;;
+      status.textContent = &#x27;Looking for shorts...&#x27;;
+
+      try {
+        const results = await fetchShortzResults(query);
+        if (!results.length) {
+          title.textContent = &#x27;No shorts found&#x27;;
+          status.textContent = &#x27;Try a different search.&#x27;;
+          return;
+        }
+
+        shortzResults = results;
+        shortzIndex = 0;
+        shortzSearchAvailable = true;
+        loadShortEmbed();
+      } catch (error) {
+        shortzSearchAvailable = false;
+        shortzResults = [{ videoId: &#x27;YiEcmWi4pNI&#x27;, title: &#x27;Featured video&#x27;, author: &#x27;YouTube&#x27;, viewCount: 0 }];
+        shortzIndex = 0;
+        title.textContent = &#x27;Search unavailable&#x27;;
+        status.textContent = &#x27;Search hosts are down right now. The player still works with the featured video.&#x27;;
+        loadShortEmbed();
+      }
+    }
+
+    async function fetchShortzResults(query) {
+      try {
+        return await fetchShortzFromBrowser(query);
+      } catch (error) {
+        if (hasAppsScriptBridge()) {
+          return fetchShortzFromAppsScript(query);
+        }
+        throw error;
+      }
+    }
+
+    async function fetchShortzFromBrowser(query) {
+      const searchQuery = encodeURIComponent(`type:video duration:short ${query}`);
+      const availableHosts = SHORTZ_API_HOSTS.filter((host) =&gt; !shortzFailedHosts.has(host));
+      const hostsToTry = availableHosts.length ? availableHosts : SHORTZ_API_HOSTS;
+
+      for (const host of hostsToTry) {
+        try {
+          const response = await fetch(`${host}/api/v1/search?q=${searchQuery}`, { headers: { Accept: &#x27;application/json&#x27; } });
+          if (!response.ok) {
+            shortzFailedHosts.add(host);
+            continue;
+          }
+
+          const data = await response.json();
+          const mapped = (Array.isArray(data) ? data : [])
+            .filter((item) =&gt; item &amp;&amp; (item.type === &#x27;video&#x27; || item.type === &#x27;shortVideo&#x27; || item.videoId))
+            .filter((item) =&gt; !item.lengthSeconds || item.lengthSeconds &lt;= 180)
+            .map((item) =&gt; ({
+              videoId: item.videoId,
+              title: item.title || &#x27;Untitled short&#x27;,
+              author: item.author || &#x27;&#x27;,
+              viewCount: typeof item.viewCount === &#x27;number&#x27; ? item.viewCount : 0
+            }))
+            .filter((item) =&gt; item.videoId);
+
+          if (mapped.length) return mapped;
+        } catch (error) {
+          shortzFailedHosts.add(host);
+        }
+      }
+
+      throw new Error(&#x27;No short search hosts available&#x27;);
+    }
+
+    function hasAppsScriptBridge() {
+      return typeof google !== &#x27;undefined&#x27; &amp;&amp; google.script &amp;&amp; google.script.run;
+    }
+
+    function fetchShortzFromAppsScript(query) {
+      return new Promise((resolve, reject) =&gt; {
+        google.script.run
+          .withSuccessHandler((results) =&gt; resolve(Array.isArray(results) ? results : []))
+          .withFailureHandler(reject)
+          .searchShortzServer(query);
+      });
+    }
+
+    function nextShort() {
+      if (!shortzResults.length) return;
+      shortzIndex = (shortzIndex + 1) % shortzResults.length;
+      loadShortEmbed();
+    }
+
+    function openCurrentShort() {
+      const shortData = shortzResults[shortzIndex];
+      if (shortData &amp;&amp; shortData.videoId) window.open(makeShortzWatchUrl(shortData.videoId), &#x27;_blank&#x27;, &#x27;noopener&#x27;);
+    }
+
+    function toggleMusicPlayer() {
+      const player = document.querySelector(&#x27;.music-player&#x27;);
+      const button = document.getElementById(&#x27;musicCollapseBtn&#x27;);
+      if (!player || !button) return;
+      player.classList.toggle(&#x27;collapsed&#x27;);
+      button.textContent = player.classList.contains(&#x27;collapsed&#x27;) ? &#x27;Music&#x27; : &#x27;Hide&#x27;;
+    }
+
+    const audioViz = {
+      context: null,
+      analyser: null,
+      source: null,
+      data: null,
+      frame: 0,
+      lastFrameTime: 0,
+      lastPlaying: null,
+      particles: []
+    };
+
+    function ensureAudioVisualizer(audio) {
+      if (audioViz.context || !audio) return;
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+      audioViz.context = new AudioContextClass();
+      audioViz.analyser = audioViz.context.createAnalyser();
+      audioViz.analyser.fftSize = 128;
+      audioViz.data = new Uint8Array(audioViz.analyser.frequencyBinCount);
+      audioViz.source = audioViz.context.createMediaElementSource(audio);
+      audioViz.source.connect(audioViz.analyser);
+      audioViz.analyser.connect(audioViz.context.destination);
+    }
+
+    function resizeCanvas(canvas) {
+      const rect = canvas.getBoundingClientRect();
+      const scale = Math.min(window.devicePixelRatio || 1, 1.5);
+      const width = Math.max(1, Math.floor(rect.width * scale));
+      const height = Math.max(1, Math.floor(rect.height * scale));
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+      return { width, height };
+    }
+
+    function getParticles(count) {
+      while (audioViz.particles.length &lt; count) {
+        audioViz.particles.push({
+          x: Math.random(),
+          y: Math.random(),
+          vx: (Math.random() - 0.5) * 0.0018,
+          vy: (Math.random() - 0.5) * 0.0018,
+          r: 1.5 + Math.random() * 4
+        });
+      }
+      return audioViz.particles;
+    }
+
+    function drawVisualizerCanvas(canvas, data, goldMode, playing) {
+      const ctx = canvas.getContext(&#x27;2d&#x27;);
+      if (!ctx) return;
+      const size = resizeCanvas(canvas);
+      ctx.clearRect(0, 0, size.width, size.height);
+
+      const time = performance.now() * 0.001;
+      const gradient = ctx.createLinearGradient(0, 0, size.width, size.height);
+      gradient.addColorStop(0, goldMode ? &#x27;rgba(255,229,138,0.18)&#x27; : &#x27;rgba(186,242,187,0.18)&#x27;);
+      gradient.addColorStop(0.5, goldMode ? &#x27;rgba(245,197,66,0.08)&#x27; : &#x27;rgba(95,183,99,0.08)&#x27;);
+      gradient.addColorStop(1, goldMode ? &#x27;rgba(168,111,0,0.18)&#x27; : &#x27;rgba(63,143,67,0.16)&#x27;);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, size.width, size.height);
+
+      const energy = data &amp;&amp; data.length
+        ? data.reduce((sum, value) =&gt; sum + value, 0) / (data.length * 255)
+        : 0.08 + Math.sin(time) * 0.03;
+
+      getParticles(38).forEach((particle, index) =&gt; {
+        particle.x += particle.vx * (1 + energy * 8);
+        particle.y += particle.vy * (1 + energy * 8);
+        particle.x += Math.sin(time + index) * 0.00035;
+        particle.y += Math.cos(time * 0.8 + index) * 0.00035;
+        if (particle.x &lt; -0.05) particle.x = 1.05;
+        if (particle.x &gt; 1.05) particle.x = -0.05;
+        if (particle.y &lt; -0.05) particle.y = 1.05;
+        if (particle.y &gt; 1.05) particle.y = -0.05;
+        const radius = particle.r * (1 + energy * 2.4) * (window.devicePixelRatio || 1);
+        ctx.beginPath();
+        ctx.fillStyle = goldMode
+          ? `rgba(255, 229, 138, ${0.18 + energy * 0.42})`
+          : `rgba(186, 242, 187, ${0.16 + energy * 0.38})`;
+        ctx.arc(particle.x * size.width, particle.y * size.height, radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      if (data &amp;&amp; data.length) {
+        const barCount = data.length;
+        const barWidth = size.width / barCount;
+        for (let i = 0; i &lt; barCount; i++) {
+          const value = data[i] / 255;
+          const height = Math.max(4, value * size.height * 0.66);
+          const x = i * barWidth;
+          const y = size.height - height;
+          const hue = goldMode ? 42 + value * 22 : 112 + value * 54;
+          ctx.fillStyle = `hsla(${hue}, 82%, ${goldMode ? 54 : 46}%, ${0.18 + value * 0.42})`;
+          ctx.fillRect(x, y, Math.max(2, barWidth - 2), height);
+        }
+      }
+    }
+
+    function clearVisualizerCanvases() {
+      [
+        document.getElementById(&#x27;visualizerCanvas&#x27;),
+        document.getElementById(&#x27;gameVisualizerCanvas&#x27;)
+      ].filter(Boolean).forEach((canvas) =&gt; {
+        const ctx = canvas.getContext(&#x27;2d&#x27;);
+        if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
+    }
+
+    function drawAudioVisualizer(timestamp = 0) {
+      const audio = document.getElementById(&#x27;musicAudio&#x27;);
+      const canvases = [
+        document.getElementById(&#x27;visualizerCanvas&#x27;),
+        document.getElementById(&#x27;gameVisualizerCanvas&#x27;)
+      ].filter(Boolean);
+      const playing = Boolean(audio &amp;&amp; !audio.paused &amp;&amp; !audio.ended &amp;&amp; audio.src);
+      if (!playing) {
+        audioViz.frame = 0;
+        audioViz.lastFrameTime = 0;
+        updateVisualizerState();
+        clearVisualizerCanvases();
+        return;
+      }
+      if (timestamp - audioViz.lastFrameTime &lt; 50) {
+        audioViz.frame = requestAnimationFrame(drawAudioVisualizer);
+        return;
+      }
+      audioViz.lastFrameTime = timestamp;
+      if (audioViz.analyser &amp;&amp; audioViz.data &amp;&amp; playing) {
+        audioViz.analyser.getByteFrequencyData(audioViz.data);
+      }
+      const data = playing &amp;&amp; audioViz.data ? audioViz.data : null;
+      canvases.forEach((canvas) =&gt; drawVisualizerCanvas(canvas, data, document.title.includes(&#x27;Plus&#x27;), Boolean(playing)));
+      updateVisualizerState();
+      audioViz.frame = requestAnimationFrame(drawAudioVisualizer);
+    }
+
+    function updateVisualizerState() {
+      const audio = document.getElementById(&#x27;musicAudio&#x27;);
+      const playing = Boolean(audio &amp;&amp; !audio.paused &amp;&amp; !audio.ended &amp;&amp; audio.src);
+      if (audioViz.lastPlaying === playing) return;
+      audioViz.lastPlaying = playing;
+      document.querySelectorAll(&#x27;.visualizer-backdrop, .overlay-visualizer&#x27;).forEach((element) =&gt; {
+        element.classList.toggle(&#x27;active&#x27;, Boolean(playing));
+      });
+      document.querySelectorAll(&#x27;.cd-disc, .floating-music-disc&#x27;).forEach((disc) =&gt; {
+        disc.classList.toggle(&#x27;playing&#x27;, Boolean(playing));
+        disc.classList.toggle(&#x27;spinning&#x27;, Boolean(playing));
+      });
+    }
+
+    function startAudioVisualizer(audio) {
+      ensureAudioVisualizer(audio);
+      if (audioViz.context &amp;&amp; audioViz.context.state === &#x27;suspended&#x27;) {
+        audioViz.context.resume();
+      }
+      updateVisualizerState();
+      if (!audioViz.frame) {
+        audioViz.frame = requestAnimationFrame(drawAudioVisualizer);
+      }
+    }
+
+    function stopAudioVisualizer() {
+      cancelAnimationFrame(audioViz.frame);
+      audioViz.frame = 0;
+      audioViz.lastFrameTime = 0;
+      updateVisualizerState();
+      clearVisualizerCanvases();
+    }
+
+    function setAlbumArt(url) {
+      document.querySelectorAll(&#x27;.cd-disc&#x27;).forEach((disc) =&gt; disc.classList.add(&#x27;active&#x27;));
+      document.querySelectorAll(&#x27;.album-art&#x27;).forEach((image) =&gt; {
+        if (url) {
+          image.src = url;
+          image.classList.add(&#x27;active&#x27;);
+        } else {
+          image.removeAttribute(&#x27;src&#x27;);
+          image.classList.remove(&#x27;active&#x27;);
+        }
+      });
+      updateVisualizerState();
+    }
+
+    async function loadMp3CoverArt(file) {
+      if (!file || !file.type.includes(&#x27;mpeg&#x27;)) {
+        setAlbumArt(&#x27;&#x27;);
+        return;
+      }
+      try {
+        const buffer = await file.arrayBuffer();
+        const bytes = new Uint8Array(buffer);
+        if (bytes[0] !== 73 || bytes[1] !== 68 || bytes[2] !== 51) {
+          setAlbumArt(&#x27;&#x27;);
+          return;
+        }
+        const version = bytes[3];
+        const tagSize = ((bytes[6] &amp; 127) &lt;&lt; 21) | ((bytes[7] &amp; 127) &lt;&lt; 14) | ((bytes[8] &amp; 127) &lt;&lt; 7) | (bytes[9] &amp; 127);
+        let offset = 10;
+        const end = Math.min(bytes.length, 10 + tagSize);
+        while (offset + 10 &lt;= end) {
+          const frameId = String.fromCharCode(bytes[offset], bytes[offset + 1], bytes[offset + 2], bytes[offset + 3]);
+          const frameSize = version === 4
+            ? ((bytes[offset + 4] &amp; 127) &lt;&lt; 21) | ((bytes[offset + 5] &amp; 127) &lt;&lt; 14) | ((bytes[offset + 6] &amp; 127) &lt;&lt; 7) | (bytes[offset + 7] &amp; 127)
+            : (bytes[offset + 4] &lt;&lt; 24) | (bytes[offset + 5] &lt;&lt; 16) | (bytes[offset + 6] &lt;&lt; 8) | bytes[offset + 7];
+          if (!frameId.trim() || frameSize &lt;= 0) break;
+          const frameStart = offset + 10;
+          const frameEnd = Math.min(frameStart + frameSize, bytes.length);
+          if (frameId === &#x27;APIC&#x27;) {
+            let cursor = frameStart + 1;
+            while (cursor &lt; frameEnd &amp;&amp; bytes[cursor] !== 0) cursor++;
+            const mime = new TextDecoder().decode(bytes.slice(frameStart + 1, cursor)) || &#x27;image/jpeg&#x27;;
+            cursor += 2;
+            while (cursor &lt; frameEnd &amp;&amp; bytes[cursor] !== 0) cursor++;
+            cursor++;
+            const blob = new Blob([bytes.slice(cursor, frameEnd)], { type: mime });
+            setAlbumArt(URL.createObjectURL(blob));
+            return;
+          }
+          offset = frameEnd;
+        }
+        setAlbumArt(&#x27;&#x27;);
+      } catch (error) {
+        setAlbumArt(&#x27;&#x27;);
+      }
+    }
+
+    function initMusicPlayer() {
+      const audio = document.getElementById(&#x27;musicAudio&#x27;);
+      const picker = document.getElementById(&#x27;musicFilePicker&#x27;);
+      const uploadBtn = document.getElementById(&#x27;musicUploadBtn&#x27;);
+      const playBtn = document.getElementById(&#x27;musicPlayPauseBtn&#x27;);
+      const loopBtn = document.getElementById(&#x27;musicLoopBtn&#x27;);
+      const volumeSlider = document.getElementById(&#x27;musicVolumeSlider&#x27;);
+      const volumeValue = document.getElementById(&#x27;musicVolumeValue&#x27;);
+      const label = document.getElementById(&#x27;musicTrackLabel&#x27;);
+      const status = document.getElementById(&#x27;musicStatus&#x27;);
+      if (!audio || !picker || !uploadBtn || !playBtn || !loopBtn || !label || !status) return;
+      const syncVolume = () =&gt; {
+        if (!volumeSlider) return;
+        const nextVolume = Number(volumeSlider.value) / 100;
+        audio.volume = Math.min(1, Math.max(0, nextVolume));
+        if (volumeValue) volumeValue.textContent = `${Math.round(audio.volume * 100)}%`;
+      };
+      if (volumeSlider) {
+        syncVolume();
+        volumeSlider.addEventListener(&#x27;input&#x27;, syncVolume);
+      }
+
+      uploadBtn.addEventListener(&#x27;click&#x27;, () =&gt; picker.click());
+      picker.addEventListener(&#x27;change&#x27;, () =&gt; {
+        const file = picker.files &amp;&amp; picker.files[0];
+        if (!file) return;
+        audio.src = URL.createObjectURL(file);
+        label.textContent = file.name;
+        status.textContent = &#x27;Loaded and ready.&#x27;;
+        loadMp3CoverArt(file);
+      });
+
+      playBtn.addEventListener(&#x27;click&#x27;, async () =&gt; {
+        if (!audio.src) {
+          status.textContent = &#x27;Upload a song first.&#x27;;
+          return;
+        }
+        if (audio.paused) {
+          await audio.play();
+          startAudioVisualizer(audio);
+          playBtn.textContent = &#x27;Pause&#x27;;
+          status.textContent = &#x27;Playing.&#x27;;
+        } else {
+          audio.pause();
+          playBtn.textContent = &#x27;Play&#x27;;
+          status.textContent = &#x27;Paused.&#x27;;
+          stopAudioVisualizer();
+        }
+      });
+
+      audio.addEventListener(&#x27;pause&#x27;, stopAudioVisualizer);
+      audio.addEventListener(&#x27;ended&#x27;, stopAudioVisualizer);
+      audio.addEventListener(&#x27;play&#x27;, () =&gt; startAudioVisualizer(audio));
+
+      loopBtn.addEventListener(&#x27;click&#x27;, () =&gt; {
+        audio.loop = !audio.loop;
+        loopBtn.textContent = audio.loop ? &#x27;Loop On&#x27; : &#x27;Loop Off&#x27;;
+      });
+    }
+
+    function initPlayerButtonFallbacks() {
+      document.addEventListener(&#x27;click&#x27;, (event) =&gt; {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const audio = document.getElementById(&#x27;musicAudio&#x27;);
+        const status = document.getElementById(&#x27;musicStatus&#x27;);
+        if (target.id === &#x27;musicUploadBtn&#x27;) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          const picker = document.getElementById(&#x27;musicFilePicker&#x27;);
+          if (picker) picker.click();
+        }
+        if (target.id === &#x27;musicPlayPauseBtn&#x27;) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          if (!audio || !audio.src) {
+            if (status) status.textContent = &#x27;Upload a song first.&#x27;;
+            return;
+          }
+          if (audio.paused) {
+            audio.play()
+              .then(() =&gt; {
+                startAudioVisualizer(audio);
+                target.textContent = &#x27;Pause&#x27;;
+                if (status) status.textContent = &#x27;Playing.&#x27;;
+              })
+              .catch(() =&gt; {
+                if (status) status.textContent = &#x27;Could not start playback.&#x27;;
+              });
+          } else {
+            audio.pause();
+            target.textContent = &#x27;Play&#x27;;
+            if (status) status.textContent = &#x27;Paused.&#x27;;
+            stopAudioVisualizer();
+          }
+        }
+        if (target.id === &#x27;musicLoopBtn&#x27;) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          if (!audio) return;
+          audio.loop = !audio.loop;
+          target.textContent = audio.loop ? &#x27;Loop On&#x27; : &#x27;Loop Off&#x27;;
+        }
+      }, true);
+    }
+
+    function unloadGameImages() {
+      document.querySelectorAll(&#x27;.game-card img, img.game-image&#x27;).forEach((image) =&gt; {
+        if (image.dataset.unloadedForGame === &#x27;true&#x27;) return;
+        image.dataset.unloadedForGame = &#x27;true&#x27;;
+        if (image.getAttribute(&#x27;src&#x27;)) {
+          image.dataset.savedSrc = image.getAttribute(&#x27;src&#x27;);
+          image.removeAttribute(&#x27;src&#x27;);
+        }
+        if (image.getAttribute(&#x27;srcset&#x27;)) {
+          image.dataset.savedSrcset = image.getAttribute(&#x27;srcset&#x27;);
+          image.removeAttribute(&#x27;srcset&#x27;);
+        }
+      });
+    }
+
+    function restoreGameImages() {
+      document.querySelectorAll(&#x27;img[data-unloaded-for-game=&quot;true&quot;]&#x27;).forEach((image) =&gt; {
+        if (image.dataset.savedSrc) {
+          image.setAttribute(&#x27;src&#x27;, image.dataset.savedSrc);
+          delete image.dataset.savedSrc;
+        }
+        if (image.dataset.savedSrcset) {
+          image.setAttribute(&#x27;srcset&#x27;, image.dataset.savedSrcset);
+          delete image.dataset.savedSrcset;
+        }
+        delete image.dataset.unloadedForGame;
+      });
+    }
+
+    function initGameImageUnloader() {
+      const overlay = document.getElementById(&#x27;gameOverlay&#x27;);
+      if (!overlay) return;
+
+      const syncImages = () =&gt; {
+        if (overlay.classList.contains(&#x27;active&#x27;)) {
+          unloadGameImages();
+        } else {
+          restoreGameImages();
+        }
+      };
+
+      new MutationObserver(syncImages).observe(overlay, {
+        attributes: true,
+        attributeFilter: [&#x27;class&#x27;]
+      });
+      syncImages();
+    }
+
+    document.addEventListener(&#x27;DOMContentLoaded&#x27;, () =&gt; {
+      const input = document.getElementById(&#x27;shortzInput&#x27;);
+      const searchBar = document.getElementById(&#x27;searchBar&#x27;);
+      const musicCollapseBtn = document.getElementById(&#x27;musicCollapseBtn&#x27;);
+      const closeGameBtn = document.getElementById(&#x27;closeOverlayBtn&#x27;);
+
+      window.setTimeout(() =&gt; {
+        const grid = document.getElementById(&#x27;gamesGrid&#x27;);
+        if (grid &amp;&amp; !grid.children.length) {
+          renderStarterGames();
+        }
+      }, 1400);
+      renderFavorites();
+      initMusicPlayer();
+      initPlayerButtonFallbacks();
+      initGameImageUnloader();
+      initCloseWarning();
+      updateVisualizerState();
+
+      if (musicCollapseBtn) musicCollapseBtn.addEventListener(&#x27;click&#x27;, toggleMusicPlayer);
+      if (closeGameBtn) {
+        closeGameBtn.addEventListener(&#x27;click&#x27;, (event) =&gt; {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          genieCloseGame();
+        }, true);
+      }
+      if (input) {
+        input.addEventListener(&#x27;keydown&#x27;, (event) =&gt; {
+          if (event.key === &#x27;Enter&#x27;) {
+            event.preventDefault();
+            searchShortz();
+          }
+        });
+      }
+
+      if (searchBar) {
+        searchBar.addEventListener(&#x27;input&#x27;, () =&gt; {
+          if (!fallbackGamesActive) return;
+          const grid = document.getElementById(&#x27;gamesGrid&#x27;);
+          const activeFilterButton = document.querySelector(&#x27;.filter-btn.active[data-filter]&#x27;);
+          if (grid) grid.innerHTML = &#x27;&#x27;;
+          renderStarterGames(activeFilterButton ? activeFilterButton.dataset.filter : &#x27;all&#x27;, searchBar.value);
+        });
+      }
+
+      document.querySelectorAll(&#x27;.filter-btn[data-filter]&#x27;).forEach((button) =&gt; {
+        button.addEventListener(&#x27;click&#x27;, () =&gt; {
+          if (!fallbackGamesActive) return;
+          document.querySelectorAll(&#x27;.filter-btn[data-filter]&#x27;).forEach((btn) =&gt; btn.classList.remove(&#x27;active&#x27;));
+          button.classList.add(&#x27;active&#x27;);
+          const grid = document.getElementById(&#x27;gamesGrid&#x27;);
+          if (grid) grid.innerHTML = &#x27;&#x27;;
+          renderStarterGames(button.dataset.filter, searchBar ? searchBar.value : &#x27;&#x27;);
+        });
+      });
+
+      document.addEventListener(&#x27;click&#x27;, (event) =&gt; {
+        if (!fallbackGamesActive) return;
+        const favoriteButton = event.target.closest(&#x27;.favorite-btn[data-game]&#x27;);
+        if (!favoriteButton) return;
+        const game = favoriteButton.dataset.game;
+        const favorites = getFavorites();
+        const nextFavorites = favorites.includes(game)
+          ? favorites.filter((item) =&gt; item !== game)
+          : favorites.concat(game);
+        saveFavorites(nextFavorites);
+        favoriteButton.classList.toggle(&#x27;favorited&#x27;, nextFavorites.includes(game));
+        renderFavorites();
+      });
+
+      document.addEventListener(&#x27;keydown&#x27;, (event) =&gt; {
+        const shortzPage = document.getElementById(&#x27;shortz&#x27;);
+        const gameOverlay = document.getElementById(&#x27;gameOverlay&#x27;);
+        if (event.key === &#x27;Escape&#x27; &amp;&amp; gameOverlay &amp;&amp; gameOverlay.classList.contains(&#x27;active&#x27;)) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          genieCloseGame();
+          return;
+        }
+        if (event.key === &#x27;ArrowDown&#x27; &amp;&amp; shortzPage &amp;&amp; shortzPage.classList.contains(&#x27;active&#x27;)) {
+          event.preventDefault();
+          nextShort();
+        }
+      });
+    });
+  &lt;/script&gt;
+  &lt;script async data-id=&quot;101481770&quot; src=&quot;https://static.getclicky.com/js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"
+        xmlns="http://www.w3.org/1999/xhtml"></xhtml:iframe>
+    </xhtml:div>
+  </foreignObject>
+</svg>
